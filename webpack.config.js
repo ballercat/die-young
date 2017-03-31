@@ -1,4 +1,4 @@
-const path = require('js');
+const path = require('fs');
 
 module.exports = {
   context: __dirname + '/src/',
