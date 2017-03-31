@@ -1,0 +1,11 @@
+{
+  "name": "die-young",
+  "version": "0.0.0",
+  "description": "game maybe",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Arthur Buldauskas",
+  "license": "MIT"
+}
