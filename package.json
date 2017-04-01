@@ -2,6 +2,7 @@
   "name": "die-young",
   "version": "0.0.0",
   "description": "game maybe",
+  "repository": "git@github.com:ballercat/die-young.git",
   "main": "src/main.js",
   "scripts": {
     "test": "test"
@@ -16,6 +17,8 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "node-sass": "^4.5.2",
+    "pixi.js": "^4.4.4",
     "victor": "^1.1.0"
   }
 }

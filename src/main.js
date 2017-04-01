@@ -1,4 +1,7 @@
 // codes here
-//
+'use strict';
 
-console.log('foobar');
+const appRoot = document.getElementById('app');
+
+
+
