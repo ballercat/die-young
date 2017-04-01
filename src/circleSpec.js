@@ -11,11 +11,13 @@ describe('Circle', () => {
     });
     const c2 = new Circle({
       center: new Victor(1, 1),
-      radius: 1.5
+      radius: 2
     });
 
-    expect(isCollision(c1.collides(c2))).toBe(true);
-    expect(isCollision(c2.collides(c1))).toBe(true);
+    let collision = c1.collides(c2);
+    expect(isCollision(collision)).toBe(true);
+    collision = c2.collides(c1);
+    expect(isCollision(collision)).toBe(true);
   });
 
 });
