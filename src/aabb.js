@@ -3,6 +3,9 @@ import { is } from 'ramda';
 
 const isVictor = is(Victor);
 
+/**
+ * Axis Aligned Bounding Box
+ */
 export default class AABB {
   constructor(options) {
     Object.assign(this, options || {});

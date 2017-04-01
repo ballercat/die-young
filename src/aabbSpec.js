@@ -38,5 +38,19 @@ describe('AABB', () => {
     expect(aabb.collides(other)).toBe(true);
     expect(other.collides(aabb)).toBe(true);
   });
+
+  it('handles collisions correctly', () => {
+    const aabb = new AABB({
+      center: new Victor(0, 0.5),
+      halfSize: new Victor(0.5, 0.5)
+    });
+    const other = new AABB({
+      center: new Victor(0, 2),
+      halfSize: new Victor(0.5, 0.5)
+    });
+
+    expect(aabb.collides(other)).toBe(false);
+    expect(other.collides(aabb)).toBe(false);
+  });
 });
 
