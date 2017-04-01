@@ -1,5 +1,5 @@
 import pixi from './renderer';
-import input, { UP, DOWN, LEFT, RIGHT } from './input';
+import Input, { UP, DOWN, LEFT, RIGHT } from './input';
 
 const { autoDetectRenderer, Container, Graphics } = pixi;
 
@@ -23,7 +23,8 @@ rectangle.beginFill(0x66CCFF);
 rectangle.lineStyle(4, 0xFF3300, 1);
 rectangle.drawRect(0, 0, 100, 100);
 rectangle.endFill();
-rectangle.x = rectangle.y = 0;
+rectangle.x = 0;
+rectangle.y = 500;
 
 // Basics
 renderer.view.style.border = '1px dashed black';
@@ -39,15 +40,20 @@ const render = () => {
 render();
 
 // Keyboard
-const onUp = input(UP)(() => console.log(rectangle.y--));
-const onDown = input(DOWN)(() => console.log(rectangle.y++));
-const onLeft = input(LEFT)(() => rectange.x++);
-const onRight = input(RIGHT)(() => rectange.x--);
+const inputHanlder = new Input();
 
-console.log(UP, DOWN, LEFT, RIGHT);
+const MOVEBY = 10;
+const moveList = {
+	[UP]: () => rectangle.y = rectangle.y - MOVEBY,
+	[DOWN]: () => rectangle.y = rectangle.y + MOVEBY,
+	[LEFT]: () => rectangle.x = rectangle.x - MOVEBY,
+	[RIGHT]: () => rectangle.x = rectangle.x + MOVEBY
+};
 
-window.addEventListener('keydown', onUp);
-window.addEventListener('keydown', (e) => {
-  console.log(e);
-  onDown(e);
+inputHanlder.onKeydown(data => {
+  const move = moveList[data.which];
+  if (move) {
+    move();
+  }
 });
+
