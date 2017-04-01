@@ -1,5 +1,6 @@
 import Circle from './circle';
 import Victor from 'victor';
+import { isCollision } from './collision';
 
 describe('Circle', () => {
 
@@ -13,8 +14,8 @@ describe('Circle', () => {
       radius: 1.5
     });
 
-    expect(c1.collides(c2)).toBe(true);
-    expect(c2.collides(c1)).toBe(true);
+    expect(isCollision(c1.collides(c2))).toBe(true);
+    expect(isCollision(c2.collides(c1))).toBe(true);
   });
 
 });

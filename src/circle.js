@@ -1,5 +1,6 @@
 import Victor from 'victor';
 import { is, isNil } from 'ramda';
+import collision from './collision';
 
 const isVictor = is(Victor);
 
@@ -18,12 +19,7 @@ export default class Circle {
 
   collides(other) {
     if (!isCircle(other)) return false;
-
-    // .subtract is destructive
-    const distance = this.center.clone().subtract(other.center);
-    const radius = this.radius + other.radius;
-
-    return distance.length() < radius;
+    return collision(this, other);
   }
 }
 
