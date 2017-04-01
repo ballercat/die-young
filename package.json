@@ -5,13 +5,16 @@
   "repository": "git@github.com:ballercat/die-young.git",
   "main": "src/main.js",
   "scripts": {
-    "test": "test"
+    "test": "babel-node jasmine.js",
+    "watch:test": "nodemon -w ./src -e js -x npm test"
   },
   "author": "Arthur Buldauskas",
   "license": "MIT",
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.0",
     "css-loader": "^0.28.0",
     "eslint": "^3.19.0",
+    "jasmine": "^2.5.3",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
     "webpack": "^2.3.2",
