@@ -16,8 +16,27 @@ describe('AABB', () => {
     expect(isVictor(aabb.halfSize)).toBe(true);
   });
 
-  it('can resolve collisions', () => {
+  it('takes custom options', () => {
+    const center = new Victor();
+    const halfSize = new Victor();
+    const aabb = new AABB({center, halfSize});
 
+    expect(aabb.center).toBe(center);
+    expect(aabb.halfSize).toBe(halfSize);
+  });
+
+  it('can resolve collisions', () => {
+    const aabb = new AABB({
+      center: new Victor(0.5, 0.5),
+      halfSize: new Victor(0.5, 0.5)
+    });
+    const other = new AABB({
+      center: new Victor(0.5, 0.5),
+      halfSize: new Victor(0.5, 0.5)
+    });
+
+    expect(aabb.collides(other)).toBe(true);
+    expect(other.collides(aabb)).toBe(true);
   });
 });
 

@@ -17,7 +17,7 @@ export default class AABB {
   }
 
   collides(other) {
-    if (!isVictor(other)) return false;
+    if (!isAABB(other)) return false;
 
     if (Math.abs(this.center.x - other.center.x) > this.halfSize.x + other.halfSize.x) return false;
     if (Math.abs(this.center.y - other.center.y) > this.halfSize.y + other.halfSize.y) return false;
@@ -25,4 +25,6 @@ export default class AABB {
     return true;
   }
 }
+
+export const isAABB = is(AABB);
 
