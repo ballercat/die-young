@@ -15,11 +15,8 @@ export default class Circle {
     if (isNil(this.radius)) {
       this.radius = 0;
     }
-  }
 
-  collides(other) {
-    if (!isCircle(other)) return false;
-    return checkCircleCollision(this, other);
+    this.collision = checkCircleCollision(this);
   }
 }
 

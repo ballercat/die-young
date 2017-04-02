@@ -14,9 +14,9 @@ describe('Circle', () => {
       radius: 2
     });
 
-    let collision = c1.collides(c2);
+    let collision = c1.collision(c2);
     expect(isCollision(collision)).toBe(true);
-    collision = c2.collides(c1);
+    collision = c2.collision(c1);
     expect(isCollision(collision)).toBe(true);
   });
 

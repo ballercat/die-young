@@ -1,7 +1,7 @@
 import Victor from 'victor';
-import { has } from 'ramda';
+import { has, curry } from 'ramda';
 
-export const checkCircleCollision = (a, b) => {
+export const checkCircleCollision = curry((a, b) => {
   const distance = a.center.clone().subtract(b.center);
   const radius = a.radius + b.radius;
   const length = distance.length();
@@ -14,11 +14,11 @@ export const checkCircleCollision = (a, b) => {
   }
 
   return false;
-};
+});
 
-export const checkPolygonCollision = (a, b) => {
+export const checkPolygonCollision = curry((a, b) => {
   return false;
-}
+});
 
 const collision = (a, b) => {
   if (!a || !b) return false;
