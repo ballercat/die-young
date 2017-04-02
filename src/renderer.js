@@ -2,6 +2,8 @@ import Pixi from 'pixi.js'
 
 const PIXI = window.PIXI;
 
+export const Graphics = PIXI.Graphics;
+export const Container = PIXI.Container;
 export const basicRenderer = (root) => {
   const CANVAS_WIDTH = 800;
   const CANVAS_HEIGHT = 600;
@@ -22,6 +24,7 @@ export const basicRenderer = (root) => {
 
   return renderer;
 }
+
 
 export default PIXI;
 

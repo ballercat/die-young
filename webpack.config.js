@@ -6,11 +6,12 @@ module.exports = {
   devtool: 'source-map',
 
   entry: {
-    javascript: './main.js'
+    main: './main.js',
+    polygonTest: './polygonTest.js'
   },
 
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: __dirname + '/dist'
   },
 

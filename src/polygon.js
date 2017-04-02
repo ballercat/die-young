@@ -1,14 +1,18 @@
 import Victor from 'victor';
+import { POLYGON } from './bodyTypes';
 
 export default class Polygon {
   constructor(units) {
     if (units.length % 2 > 0)
       throw 'unit array must be a power of two, containing x, y coordinates';
 
+    this.type = POLYGON;
     this.units = [...units];
     this.vertices = Polygon.unitsToVecotrs(this.units);
     this.edges = Polygon.getEdges(this.vertices);
     this.normals = Polygon.getNormals(this.edges);
+
+    this.position = new Victor(0, 0);
   }
 
   static unitsToVecotrs(units) {

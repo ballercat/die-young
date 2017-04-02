@@ -1,5 +1,6 @@
 import Polygon from './polygon';
 import Victor from 'victor';
+import { POLYGON } from './bodyTypes';
 import { compose, is, has, all } from 'ramda';
 
 // pentagon
@@ -54,5 +55,8 @@ describe('Polygon', () => {
     expect(poly.edges.length).toBe(VERTEX_COUNT);
   });
 
+  it('has a body type of POLYGON', () => {
+    expect(poly.type).toBe(POLYGON);
+  });
 });
 

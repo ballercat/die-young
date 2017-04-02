@@ -1,8 +1,15 @@
 import Victor from 'victor';
-import { isNil } from 'ramda';
+import Polygon from './polygon';
+import { isNil, has } from 'ramda';
+
+const hasBody = has('body');
 
 export default class Body {
   constructor(options) {
+    if (!hasBody(options)) {
+      throw 'body is required';
+    }
+
     Object.assign(this.state, options || {});
 
     if (isNil(this.state.mass)) {
@@ -15,8 +22,13 @@ export default class Body {
 
     this.previousState = {
       mass: this.state.mass,
+      body: this.state.body,
       position: this.state.position.clone()
     };
+  }
+
+  attachShape(shape) {
+    this.shape = shape;
   }
 
   get mass() {
@@ -37,7 +49,11 @@ export default class Body {
   }
 
   update(delta) {
+    // Update physics here
   }
 
+  render() {
+    this.shape.render(this.body);
+  }
 }
 
