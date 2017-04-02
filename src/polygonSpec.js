@@ -2,7 +2,7 @@ import Polygon from './polygon';
 import Victor from 'victor';
 import { compose, is, has, all } from 'ramda';
 
-// hexagon
+// pentagon
 const units = [
   0, 0.5,
   0.25, 0,

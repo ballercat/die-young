@@ -5,7 +5,8 @@ export default class Polygon {
     if (units.length % 2 > 0)
       throw 'unit array must be a power of two, containing x, y coordinates';
 
-    this.vertices = Polygon.unitsToVecotrs(units);
+    this.units = [...units];
+    this.vertices = Polygon.unitsToVecotrs(this.units);
     this.edges = Polygon.getEdges(this.vertices);
     this.normals = Polygon.getNormals(this.edges);
   }

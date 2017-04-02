@@ -1,4 +1,27 @@
 import Pixi from 'pixi.js'
 
-export default window.PIXI;
+const PIXI = window.PIXI;
+
+export const basicRenderer = (root) => {
+  const CANVAS_WIDTH = 800;
+  const CANVAS_HEIGHT = 600;
+  const CANVAS_OPTIONS = {
+    antialias: false,
+    transparent: true,
+    resolution: 1
+  };
+
+  const renderer = PIXI.autoDetectRenderer(
+    CANVAS_WIDTH,
+    CANVAS_HEIGHT,
+    CANVAS_OPTIONS
+  );
+  // Basics
+  renderer.view.style.border = '1px dashed black';
+  root.appendChild(renderer.view);
+
+  return renderer;
+}
+
+export default PIXI;
 

@@ -17,7 +17,7 @@ export const checkCircleCollision = curry((a, b) => {
 });
 
 export const checkPolygonCollision = curry((a, b) => {
-  return false;
+
 });
 
 const collision = (a, b) => {

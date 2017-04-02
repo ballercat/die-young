@@ -1,37 +1,28 @@
-import pixi from './renderer';
+import pixi, { basicRenderer } from './renderer';
 import Input, { UP, DOWN, LEFT, RIGHT } from './input';
+import polygonGraphic from './polygonGraphic';
+import Polygon from './polygon';
 
-const { autoDetectRenderer, Container, Graphics } = pixi;
+const { Container } = pixi;
 
-const appRoot = document.getElementById('app');
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 600;
-const CANVAS_OPTIONS = {
-  antialias: false,
-  transparent: true,
-  resolution: 1
-};
+const renderer = basicRenderer(document.getElementById('app'));
+// pentagon
+const units = [
+  0, 0.75,
+  0.25, 0,
+  0.75, 0,
+  1, 0.75,
+  0.5, 1
+];
+const fill = 0xFFFFFF;
+const lineStyle = [1, 0xFF3300, 1];
+const poly = polygonGraphic(new Polygon(units.map(unit => unit * 100)), { fill, lineStyle })
+poly.scale = {x: -1, y: -1};
+poly.x = 100;
+poly.y = 500;
 
-const renderer = autoDetectRenderer(
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  CANVAS_OPTIONS
-);
-
-const rectangle = new Graphics();
-rectangle.beginFill(0x66CCFF);
-rectangle.lineStyle(4, 0xFF3300, 1);
-rectangle.drawRect(0, 0, 100, 100);
-rectangle.endFill();
-rectangle.x = 0;
-rectangle.y = 500;
-
-// Basics
-renderer.view.style.border = '1px dashed black';
-appRoot.appendChild(renderer.view);
 const stage = new Container();
-
-stage.addChild(rectangle);
+stage.addChild(poly);
 
 const render = () => {
   renderer.render(stage);
@@ -44,10 +35,10 @@ const inputHanlder = new Input();
 
 const MOVEBY = 10;
 const moveList = {
-	[UP]: () => rectangle.y = rectangle.y - MOVEBY,
-	[DOWN]: () => rectangle.y = rectangle.y + MOVEBY,
-	[LEFT]: () => rectangle.x = rectangle.x - MOVEBY,
-	[RIGHT]: () => rectangle.x = rectangle.x + MOVEBY
+	[UP]: () => poly.y = poly.y - MOVEBY,
+	[DOWN]: () => poly.y = poly.y + MOVEBY,
+	[LEFT]: () => poly.x = poly.x - MOVEBY,
+	[RIGHT]: () => poly.x = poly.x + MOVEBY
 };
 
 inputHanlder.onKeydown(data => {
