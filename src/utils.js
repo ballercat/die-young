@@ -1,14 +1,15 @@
 import { POLYGON } from './bodyTypes';
 
 export const randomPolygon = (
-  r = 50.0,
-  minSides = 4,
+  r = 100.0,
+  minSides = 3,
+  maxSides = 10,
   width = 800,
   height = 600
 ) => {
   const y0 = r;
   const x0 = r;
-  const vertexCount = minSides + ((Math.random() * 7) | 0);
+  const vertexCount = minSides + ((Math.random() * (maxSides - minSides)) | 0);
   const units = [];
   const angle = [];
   for (let i = 0; i < vertexCount; i++) {
@@ -28,4 +29,12 @@ export const randomPolygon = (
     units
   };
 }
+
+export const project = (v, b) => {
+  const ret = v.clone();
+  const amt = ret.dot(b) / b.length();
+  ret.x = amt * b.x;
+  ret.y = amt * b.y;
+  return ret;
+};
 

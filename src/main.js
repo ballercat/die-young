@@ -1,9 +1,7 @@
-import pixi, { basicRenderer } from './renderer';
+import { Container, basicRenderer } from './renderer';
 import Input, { UP, DOWN, LEFT, RIGHT } from './input';
 import polygonGraphic from './polygonGraphic';
 import Polygon from './polygon';
-
-const { Container } = pixi;
 
 const renderer = basicRenderer(document.getElementById('app'));
 // pentagon

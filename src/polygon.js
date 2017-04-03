@@ -2,7 +2,7 @@ import Victor from 'victor';
 import { POLYGON } from './bodyTypes';
 
 export default class Polygon {
-  constructor(units) {
+  constructor(units, x = 0, y = 0) {
     if (units.length % 2 > 0)
       throw 'unit array must be a power of two, containing x, y coordinates';
 
@@ -12,7 +12,23 @@ export default class Polygon {
     this.edges = Polygon.getEdges(this.vertices);
     this.normals = Polygon.getNormals(this.edges);
 
-    this.position = new Victor(0, 0);
+    this.position = new Victor(x, y);
+  }
+
+  set x(x) {
+    this.position.x = x;
+  }
+
+  set y(y) {
+    this.position.y = y;
+  }
+
+  get x() {
+    return this.position.x;
+  }
+
+  get y() {
+    return this.position.y;
   }
 
   static unitsToVecotrs(units) {
@@ -28,17 +44,26 @@ export default class Polygon {
   static getEdges(vertices) {
     return vertices.map((vertex, i) => ({
       start: vertex,
-      end: vertices[i + 1 != vertices.length ? i : 0]
+      end: vertices[i + 1 != vertices.length ? i + 1 : 0]
     }));
   }
 
-  static getNormals(edges) {
+  static getNormals(edges, flip = false) {
+    if (flip) {
+      return edges.map(edge => {
+        const normal = edge.end.clone().subtract(edge.start);
+        const x = normal.x;
+        normal.x = normal.y;
+        normal.y = -x;
+        return normal.norm();
+      });
+    }
     return edges.map(edge =>
-      edge.start.clone()
-        .subtract(edge.end)
-        .normalize()
-        .rotateDeg(90)
-    );
+      edge.end.clone()
+        .subtract(edge.start)
+        .norm()
+        .rotateDeg(-90));
+
   }
 
 }
