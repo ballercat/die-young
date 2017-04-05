@@ -48,22 +48,14 @@ export default class Polygon {
     }));
   }
 
-  static getNormals(edges, flip = false) {
-    if (flip) {
-      return edges.map(edge => {
-        const normal = edge.end.clone().subtract(edge.start);
-        const x = normal.x;
-        normal.x = normal.y;
-        normal.y = -x;
-        return normal.norm();
-      });
-    }
-    return edges.map(edge =>
-      edge.end.clone()
-        .subtract(edge.start)
-        .norm()
-        .rotateDeg(-90));
-
+  static getNormals(edges) {
+    return edges.map(edge => {
+      const normal = edge.end.clone().subtract(edge.start);
+      const x = normal.x;
+      normal.x = normal.y;
+      normal.y = -x;
+      return normal.norm();
+    });
   }
 
 }

@@ -73,28 +73,6 @@ export default class Shape {
 
   renderPolygonDebug(polygon) {
     this.renderPolygon(polygon);
-    polygon.edges.forEach((edge, i) => {
-      this.graphics.lineStyle(1, 0x0000FF);
-      const midPoint = [
-        (edge.start.x + edge.end.x) / 2,
-        (edge.start.y + edge.end.y) / 2
-      ];
-      this.graphics.moveTo(...midPoint);
-      this.graphics.lineTo(polygon.normals[i].x + midPoint[0], polygon.normals[i].y + midPoint[1]);
-
-      // this.graphics.moveTo(polygon.normals[i].x, polygon.normals[i].y);
-      // this.graphics.lineTo(
-      //   polygon.normals[i + 1 != polygon.normals.length ? i + 1 : 0].x,
-      //   polygon.normals[i + 1 != polygon.normals.length ? i + 1 : 0].y
-      // );
-      let proj = project(edge.start, polygon.normals[i]);
-      console.log('start', proj);
-       this.graphics.lineStyle(2, 0x00FF00);
-       this.graphics.moveTo(100 + proj.x, 100 + proj.y);
-       proj = project(edge.end, polygon.normals[i]);
-       this.graphics.lineTo(100 + proj.x, 100 + proj.y);
-      console.log('end', proj);
-    });
   }
 };
 

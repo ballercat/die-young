@@ -3,12 +3,12 @@ import { POLYGON } from './bodyTypes';
 export const randomPolygon = (
   r = 100.0,
   minSides = 3,
-  maxSides = 10,
+  maxSides = 5,
   width = 800,
   height = 600
 ) => {
-  const y0 = r;
-  const x0 = r;
+  const y0 = 0;
+  const x0 = 0;
   const vertexCount = minSides + ((Math.random() * (maxSides - minSides)) | 0);
   const units = [];
   const angle = [];
@@ -23,8 +23,8 @@ export const randomPolygon = (
   }
 
   return {
-    x: width/2 - 200 + (Math.random() * 200) | 0,
-    y: height/2 - 200 + (Math.random() * 200) | 0,
+    x: 0,
+    y: 0,
     type: POLYGON,
     units
   };
