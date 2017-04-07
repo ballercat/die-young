@@ -1,6 +1,7 @@
 import Victor from 'victor';
 import { has, curry } from 'ramda';
 
+
 export const checkCircleCollision = curry((a, b) => {
   const distance = a.center.clone().subtract(b.center);
   const radius = a.radius + b.radius;
@@ -34,11 +35,25 @@ const range = (normal, vertices) => {
 
 export const polygonPolygon = curry((a, b) => {
   const normals = [...a.normals, ...b.normals];
-  return !(normals.find(normal => {
+  const manifold = {
+    overlap: Number.MAX_VALUE,
+    normal: null
+  };
+  const collides = !normals.find(normal => {
     const ra = range(normal, a.vertices);
     const rb = range(normal, b.vertices);
-    return (ra[MIN] > rb[MAX] || rb[MIN] > ra[MAX]);
-  }));
+    const overlap = Math.max(0, Math.min(ra[MAX], rb[MAX]) - Math.max(ra[MIN], rb[MIN]));
+    //if !(ra[MIN] > rb[MAX] || rb[MIN] > ra[MAX]) {
+
+    if (overlap < manifold.overlap) {
+      manifold.overlap = overlap;
+      manifold.normal = normal;
+    }
+
+    return !overlap;
+  });
+
+  return collides ? manifold : false;
 });
 
 const collision = (a, b) => {

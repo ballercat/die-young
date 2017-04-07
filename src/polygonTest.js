@@ -33,8 +33,9 @@ inputHandler.onKeydown((e) => {
     // Crate and collision test two polygons
     const poly = new Polygon(randomPolygon().units);
     const poly2 = new Polygon(randomPolygon().units);
-
-    if (polygonPolygon(poly, poly2)) {
+    const collision = polygonPolygon(poly, poly2)
+    if (collision) {
+      console.log('Collision Manifold: ', collision);
       polyShape.lineStyle = LINE_COLLISION;
       polyShape2.lineStyle = LINE_COLLISION;
     } else {

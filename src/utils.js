@@ -3,7 +3,7 @@ import { POLYGON } from './bodyTypes';
 export const randomPolygon = (
   r = 100.0,
   minSides = 3,
-  maxSides = 5,
+  maxSides = 6,
   width = 800,
   height = 600
 ) => {

@@ -15,6 +15,14 @@ export default class Polygon {
     this.position = new Victor(x, y);
   }
 
+  static fromArray(array) {
+    return new Polygon(array);
+  }
+
+  static fromArraySegment(start, end, source) {
+    return new Polygon(source.slice(start, end));
+  }
+
   set x(x) {
     this.position.x = x;
   }
@@ -57,6 +65,6 @@ export default class Polygon {
       return normal.norm();
     });
   }
-
 }
+
 
