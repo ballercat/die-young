@@ -25,7 +25,6 @@ const polyShape2 = new Shape(Graphics, { lineStyle: LINE });
 stage.addChild(polyShape.graphics);
 stage.addChild(polyShape2.graphics);
 
-
 // Keyboard
 const inputHandler = new Input();
 inputHandler.onKeydown((e) => {
