@@ -1,24 +1,21 @@
 import AABB from './aabb';
-import Victor from 'victor';
-import { is } from 'ramda';
-
-const isVictor = is(Victor);
+import { isVector } from './utils';
 
 describe('AABB', () => {
 
   it('should have center', () => {
     const aabb = new AABB();
-    expect(isVictor(aabb.center)).toBe(true);
+    expect(isVector(aabb.center)).toBe(true);
   });
 
   it('should have halfSize', () => {
     const aabb = new AABB();
-    expect(isVictor(aabb.halfSize)).toBe(true);
+    expect(isVector(aabb.halfSize)).toBe(true);
   });
 
   it('takes custom options', () => {
-    const center = new Victor();
-    const halfSize = new Victor();
+    const center = [0, 0]
+    const halfSize = [0, 0];
     const aabb = new AABB({center, halfSize});
 
     expect(aabb.center).toBe(center);
@@ -27,12 +24,12 @@ describe('AABB', () => {
 
   it('can resolve collisions', () => {
     const aabb = new AABB({
-      center: new Victor(0.5, 0.5),
-      halfSize: new Victor(0.5, 0.5)
+      center: [0.5, 0.5],
+      halfSize: [0.5, 0.5]
     });
     const other = new AABB({
-      center: new Victor(0.5, 0.5),
-      halfSize: new Victor(0.5, 0.5)
+      center: [0.5, 0.5],
+      halfSize: [0.5, 0.5]
     });
 
     expect(aabb.collides(other)).toBe(true);
@@ -41,12 +38,12 @@ describe('AABB', () => {
 
   it('handles collisions correctly', () => {
     const aabb = new AABB({
-      center: new Victor(0, 0.5),
-      halfSize: new Victor(0.5, 0.5)
+      center: [0, 0.5],
+      halfSize: [0.5, 0.5]
     });
     const other = new AABB({
-      center: new Victor(0, 2),
-      halfSize: new Victor(0.5, 0.5)
+      center: [0, 2],
+      halfSize: [0.5, 0.5]
     });
 
     expect(aabb.collides(other)).toBe(false);

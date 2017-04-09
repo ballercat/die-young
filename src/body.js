@@ -1,4 +1,3 @@
-import Victor from 'victor';
 import Polygon from './polygon';
 import { isNil, has } from 'ramda';
 
@@ -17,7 +16,7 @@ export default class Body {
     }
 
     if (isNil(this.state.position)) {
-      this.state.position = new Victor(0, 0);
+      this.state.position = [0, 0];
     }
 
     this.previousState = {

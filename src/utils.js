@@ -39,5 +39,5 @@ export const project = (v, b) => {
   return ret;
 };
 
-export const isVector = v => is(Array) && v.length === 2;
+export const isVector = v => v && is(Array) && v.length === 2;
 

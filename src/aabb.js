@@ -1,7 +1,5 @@
-import Victor from 'victor';
+import { isVector } from './utils';
 import { is } from 'ramda';
-
-const isVictor = is(Victor);
 
 /**
  * Axis Aligned Bounding Box
@@ -10,20 +8,20 @@ export default class AABB {
   constructor(options) {
     Object.assign(this, options || {});
 
-    if (!isVictor(this.center)) {
-      this.center = new Victor(0, 0);
+    if (!isVector(this.center)) {
+      this.center = [0, 0];
     }
 
-    if (!isVictor(this.halfSize)) {
-      this.halfSize = new Victor(0, 0);
+    if (!isVector(this.halfSize)) {
+      this.halfSize = [0, 0];
     }
   }
 
   collides(other) {
     if (!isAABB(other)) return false;
 
-    if (Math.abs(this.center.x - other.center.x) > this.halfSize.x + other.halfSize.x) return false;
-    if (Math.abs(this.center.y - other.center.y) > this.halfSize.y + other.halfSize.y) return false;
+    if (Math.abs(this.center[0] - other.center[0]) > this.halfSize[0] + other.halfSize[0]) return false;
+    if (Math.abs(this.center[1] - other.center[1]) > this.halfSize[1] + other.halfSize[1]) return false;
 
     return true;
   }
