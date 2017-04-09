@@ -1,6 +1,6 @@
 import { POLYGON } from './bodyTypes';
 import AABB from './aabb';
-import { clone, div, sub, norm2 } from 'numericjs';
+import { add, clone, div, sub, norm2 } from 'numericjs';
 
 export default class Polygon {
   constructor(units, x = 0, y = 0) {
@@ -62,7 +62,7 @@ export default class Polygon {
     }
 
     return new AABB({
-      center: clone(this.position),
+      center: div(add(max, min), 2),
       halfSize: div(sub(max, min), 2)
     });
   }

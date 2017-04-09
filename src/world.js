@@ -21,7 +21,6 @@ export const makeGrid = () => {
 };
 
 export const intoGrid = curry((grid, body) => {
-  debugger;
   const bounds = body.aabb.bounds;
   const bodyMinX = Math.floor(bounds[0][0] / CELL_SIZE);
   const bodyMaxX = Math.floor(bounds[1][0] / CELL_SIZE);
@@ -88,7 +87,6 @@ export default class World {
   }
 
   getCollisionGrid(bodies) {
-    debugger;
     const grid = makeGrid();
     const placeIntoGrid = intoGrid(grid);
     bodies.forEach(placeIntoGrid);

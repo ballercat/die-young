@@ -4,7 +4,7 @@
 import { POINT, LINE, CIRCLE, POLYGON } from './bodyTypes';
 import { compose } from 'ramda';
 import { project } from './utils';
-import { sub } from 'numericjs';
+import { mul, sub } from 'numericjs';
 
 const hasPosition = body => body && body.x && body.y;
 
@@ -84,7 +84,7 @@ export default class Shape {
     }
     if (polygon.aabb) {
       const aabb = polygon.aabb;
-      this.graphics.drawRect(...sub(aabb.center, aabb.halfSize), aabb.halfSize[0] * 2, aabb.halfSize[1] * 2);
+      this.graphics.drawRect(...sub(aabb.center, aabb.halfSize), ...mul(aabb.halfSize, 2));
     }
   }
 
