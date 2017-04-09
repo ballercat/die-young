@@ -4,6 +4,7 @@
 import { POINT, LINE, CIRCLE, POLYGON } from './bodyTypes';
 import { compose } from 'ramda';
 import { project } from './utils';
+import { sub } from 'numericjs';
 
 const hasPosition = body => body && body.x && body.y;
 
@@ -63,6 +64,12 @@ export default class Shape {
 
   renderCircle(circle) {}
 
+  renderAABB(aabb) {
+    this.beginRender();
+    this.graphics.drawRect(aabb.dims[0][0], aabb.dims[1][1], aabb.halfSize * 2, aabb.halfSize * 2);
+    this.endRender();
+  }
+
   renderPolygon(polygon) {
     this.beginRender();
     // Path need to be closed, however units are not so we must append starting units to the end
@@ -74,6 +81,10 @@ export default class Shape {
     this.renderPolygon(polygon);
     if (polygon.edges && polygon.normals) {
       this.renderNormals(polygon.normals, polygon.edges);
+    }
+    if (polygon.aabb) {
+      const aabb = polygon.aabb;
+      this.graphics.drawRect(...sub(aabb.center, aabb.halfSize), aabb.halfSize[0] * 2, aabb.halfSize[1] * 2);
     }
   }
 

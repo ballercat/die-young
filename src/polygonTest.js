@@ -4,6 +4,7 @@ import Shape from './shape';
 import Polygon from './polygon';
 import { randomPolygon } from './utils';
 import { polygonPolygon } from './collision';
+import World from './world';
 
 const renderer = basicRenderer(document.getElementById('app'));
 const stage = new Container();
@@ -19,6 +20,7 @@ render();
 const LINE_COLLISION = [2, 0xFF3300];
 const LINE = [2, 0x003300];
 
+const world = new World();
 const polyShape = new Shape(Graphics, { lineStyle: LINE });
 const polyShape2 = new Shape(Graphics, { lineStyle: LINE });
 
@@ -33,14 +35,17 @@ inputHandler.onKeydown((e) => {
     const poly = new Polygon(randomPolygon().units);
     const poly2 = new Polygon(randomPolygon().units);
     const collision = polygonPolygon(poly, poly2)
+    world.add(poly, poly2);
     if (collision) {
-      console.log('Collision Manifold: ', collision);
       polyShape.lineStyle = LINE_COLLISION;
       polyShape2.lineStyle = LINE_COLLISION;
     } else {
       polyShape.lineStyle = LINE;
       polyShape2.lineStyle = LINE;
     }
+
+    world.bodies = [];
+
 
     polyShape2.render(poly2);
     polyShape.render(poly);

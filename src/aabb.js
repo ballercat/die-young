@@ -1,5 +1,6 @@
 import { isVector } from './utils';
 import { is } from 'ramda';
+import { add, sub } from 'numericjs';
 
 /**
  * Axis Aligned Bounding Box
@@ -15,6 +16,11 @@ export default class AABB {
     if (!isVector(this.halfSize)) {
       this.halfSize = [0, 0];
     }
+
+    this.bounds = [
+      sub(this.center, this.halfSize),
+      add(this.center, this.halfSize)
+    ];
   }
 
   collides(other) {
