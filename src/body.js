@@ -1,29 +1,48 @@
 import Polygon from './polygon';
 import { isNil, has } from 'ramda';
+import { POLYGON, CIRCLE } from './bodyTypes';
+import AABB from './aabb';
+import { clone } from 'numericjs';
 
 const hasBody = has('body');
+const STATIC_BODY_MASS = Number.POSITIVE_INFINITY;
 
 export default class Body {
-  constructor(options) {
+  constructor(options = {}) {
     if (!hasBody(options)) {
       throw 'body is required';
     }
 
-    Object.assign(this.state, options || {});
+    this.state = Object.assign({}, options);
 
     if (isNil(this.state.mass)) {
-      this.state.mass = Math.Infinity;
+      this.state.mass = STATIC_BODY_MASS;
     }
 
     if (isNil(this.state.position)) {
       this.state.position = [0, 0];
     }
 
+    if (isNil(this.state.forces)) {
+      this.state.forces = [];
+    }
+
     this.previousState = {
       mass: this.state.mass,
       body: this.state.body,
-      position: this.state.position.clone()
+      position: clone(this.state.position)
     };
+  }
+
+  static isStatic(body) {
+    return body.mass === STATIC_BODY_MASS;
+  }
+
+  get AABB() {
+    const aabb = this.body.aabb;
+    aabb.center = this.position;
+
+    return aabb;
   }
 
   attachShape(shape) {
@@ -35,7 +54,7 @@ export default class Body {
   }
 
   get position() {
-    return this.state.position;
+    return clone(this.state.position);
   }
 
   set mass(mass) {
@@ -43,8 +62,7 @@ export default class Body {
   }
 
   set position(position) {
-    this.state.position.x = position.x;
-    this.state.position.y = position.y;
+    this.state.position = clone(position);
   }
 
   update(delta) {

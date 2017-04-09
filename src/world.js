@@ -3,9 +3,16 @@
  * we use to run the simulation.
  */
 
+// TODO: this needs to be at least 1/2 of 60fps
+const FIXED_TIMESTEP = 1 / 60.0;
+
 export default class World {
   constructor() {
     this.bodies = [];
+  }
+
+  static getTimeStep() {
+    return FIXED_TIMESTEP;
   }
 
   add(body) {
@@ -22,5 +29,17 @@ export default class World {
     return body;
   }
 
+  /**
+   * Simulate the world by the predefined step
+   */
+  step() {
+  }
+
+  /**
+   * Returns collision pairs
+   */
+  getCollisionPairs() {
+
+  }
 }
 
