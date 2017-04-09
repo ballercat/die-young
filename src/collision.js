@@ -1,6 +1,5 @@
-import Victor from 'victor';
 import { has, curry } from 'ramda';
-
+import { dot, mul, div } from 'numericjs';
 
 export const checkCircleCollision = curry((a, b) => {
   const distance = a.center.clone().subtract(b.center);
@@ -8,9 +7,9 @@ export const checkCircleCollision = curry((a, b) => {
   const length = distance.length();
 
   if (length < radius) {
-    const L = new Victor(length, length);
-    const N = distance.divide(L);
-    const P = N.multiply(L);
+    const L = [length, length];
+    const N = div(distance, L);
+    const P = mul(N, L);
     return { N, P };
   }
 
@@ -21,14 +20,14 @@ const MIN = 0;
 const MAX = 1;
 const range = (normal, vertices) => {
   const r = [Number.MAX_VALUE, Number.MIN_VALUE];
-  let dot = 0;
+  let _dot = 0;
   const length = vertices.length;
   for(let i =0; i < length; i++) {
-    dot = vertices[i].dot(normal);
-    if (dot > r[MAX])
-      r[MAX] = dot;
-    if (dot < r[MIN])
-      r[MIN] = dot;
+    _dot = dot(vertices[i], normal);
+    if (_dot > r[MAX])
+      r[MAX] = _dot;
+    if (_dot < r[MIN])
+      r[MIN] = _dot;
   }
   return r;
 };

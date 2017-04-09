@@ -2,7 +2,6 @@
  * Shape is used for rendering and is attached to physics bodies
  */
 import { POINT, LINE, CIRCLE, POLYGON } from './bodyTypes';
-import Victor from 'victor';
 import { compose } from 'ramda';
 import { project } from './utils';
 
@@ -81,13 +80,12 @@ export default class Shape {
   renderNormals(normals, edges) {
     edges.map((edge, i) => {
       this.graphics.lineStyle(1, 0x0000FF);
-      const midpoint = new Victor(
-        (edge.start.x + edge.end.x) / 2,
-        (edge.start.y + edge.end.y) / 2
-      );
-      this.graphics.moveTo(...midpoint.toArray());
-
-      this.graphics.lineTo(normals[i].x + midpoint.x, normals[i].y + midpoint.y);
+      const midpoint = [
+        (edge.start[0] + edge.end[0]) / 2,
+        (edge.start[1] + edge.end[1]) / 2
+      ];
+      this.graphics.moveTo(...midpoint);
+      this.graphics.lineTo(normals[i][0] + midpoint[0], normals[i][1] + midpoint[1]);
     });
   }
 };

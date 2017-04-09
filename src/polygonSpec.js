@@ -1,5 +1,4 @@
 import Polygon from './polygon';
-import Victor from 'victor';
 import { POLYGON } from './bodyTypes';
 import { compose, is, has, all } from 'ramda';
 
@@ -12,16 +11,16 @@ const units = [
   1, 1
 ];
 const VERTEX_COUNT = 5;
-const isVictor = is(Victor);
+const isVector = v => is(Array, v) && v.length === 2;
 const isEdge = obj => has('start', obj) && has('end', obj);
 const unitsToEdges = compose(Polygon.getEdges, Polygon.unitsToVecotrs);
 const unitsToNormals = compose(Polygon.getNormals, unitsToEdges);
 
-describe('unitsToVecotrs', () => {
-  it('takes an array of vector units and crates vectors', () => {
+describe('unitsToVectors', () => {
+  it('takes an array of vector units and creates vectors', () => {
     const vectors = Polygon.unitsToVecotrs(units);
     expect(vectors.length).toBe(VERTEX_COUNT);
-    expect(all(isVictor, vectors)).toBe(true);
+    expect(all(isVector, vectors)).toBe(true);
   });
 });
 
@@ -37,7 +36,7 @@ describe('getNormals', () => {
   it('returns a normal for each edge', () => {
     const normals = unitsToNormals(units);
     expect(normals.length).toBe(VERTEX_COUNT);
-    expect(all(isVictor, normals)).toBe(true);
+    expect(all(isVector, normals)).toBe(true);
   });
 });
 
@@ -49,6 +48,10 @@ describe('Polygon', () => {
 
   it('assigns vertices via passed in points array', () => {
     expect(poly.vertices.length).toBe(VERTEX_COUNT);
+  });
+
+  it('has a position vector array', () => {
+    expect(isVector(poly.position)).toBe(true);
   });
 
   it('assigns edges via passed in points array', () => {

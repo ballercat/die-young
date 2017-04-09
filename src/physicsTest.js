@@ -4,6 +4,9 @@ import Shape from './shape';
 import Polygon from './polygon';
 import { randomPolygon } from './utils';
 import { polygonPolygon } from './collision';
+import { add } from 'numericjs';
+
+console.log(add);
 
 const renderer = basicRenderer(document.getElementById('app'));
 const stage = new Container();

@@ -1,5 +1,5 @@
-import Victor from 'victor';
 import { POLYGON } from './bodyTypes';
+import { div, sub, norm2 } from 'numericjs';
 
 export default class Polygon {
   constructor(units, x = 0, y = 0) {
@@ -12,7 +12,7 @@ export default class Polygon {
     this.edges = Polygon.getEdges(this.vertices);
     this.normals = Polygon.getNormals(this.edges);
 
-    this.position = new Victor(x, y);
+    this.position = [x, y];
   }
 
   static fromArray(array) {
@@ -40,10 +40,11 @@ export default class Polygon {
   }
 
   static unitsToVecotrs(units) {
-    const vectors = [];
+    const length = units.length / 2;
+    const vectors = new Array(length);
 
-    for(let i = 0; i < units.length; i = i + 2) {
-      vectors.push(new Victor(units[i], units[i + 1]));
+    for(let i = 0, j = 0; i < length; i++, j = i << 1) {
+      vectors[i] = units.slice(j, j + 2);
     }
 
     return vectors;
@@ -58,11 +59,11 @@ export default class Polygon {
 
   static getNormals(edges) {
     return edges.map(edge => {
-      const normal = edge.end.clone().subtract(edge.start);
-      const x = normal.x;
-      normal.x = normal.y;
-      normal.y = -x;
-      return normal.norm();
+      const normal = sub(edge.end, edge.start);
+      const x = normal[0];
+      normal[0] = normal[1];
+      normal[1] = -x;
+      return div(normal, norm2(normal));
     });
   }
 }

@@ -7,7 +7,8 @@ module.exports = {
 
   entry: {
     main: './main.js',
-    polygonTest: './polygonTest.js'
+    polygonTest: './polygonTest.js',
+    physicsTest: './physicsTest.js'
   },
 
   output: {
