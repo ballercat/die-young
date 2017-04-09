@@ -1,4 +1,5 @@
 import { POLYGON } from './bodyTypes';
+import { is } from 'ramda';
 
 export const randomPolygon = (
   r = 100.0,
@@ -37,4 +38,6 @@ export const project = (v, b) => {
   ret.y = amt * b.y;
   return ret;
 };
+
+export const isVector = v => is(Array) && v.length === 2;
 

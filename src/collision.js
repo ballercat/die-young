@@ -1,10 +1,19 @@
 import { has, curry } from 'ramda';
-import { dot, mul, div } from 'numericjs';
+import { dot, mul, div, sub, norm2 } from 'numericjs';
+import Victor from 'victor';
 
+/**
+ * Circle to circle collision detection
+ *
+ * @param {Circle} a
+ * @param {Circle} b
+ *
+ * @return bool Collision detected
+ */
 export const checkCircleCollision = curry((a, b) => {
-  const distance = a.center.clone().subtract(b.center);
+  const distance = sub(a.center, b.center);
   const radius = a.radius + b.radius;
-  const length = distance.length();
+  const length = norm2(distance);
 
   if (length < radius) {
     const L = [length, length];
@@ -32,6 +41,14 @@ const range = (normal, vertices) => {
   return r;
 };
 
+/**
+ * Check polygon to polygon collision
+ *
+ * @param {Polygon} a
+ * @param {Polygon} b
+ *
+ * @return false|{Object} collision manifold if collision detected
+ */
 export const polygonPolygon = curry((a, b) => {
   const normals = [...a.normals, ...b.normals];
   const manifold = {
@@ -42,7 +59,6 @@ export const polygonPolygon = curry((a, b) => {
     const ra = range(normal, a.vertices);
     const rb = range(normal, b.vertices);
     const overlap = Math.max(0, Math.min(ra[MAX], rb[MAX]) - Math.max(ra[MIN], rb[MIN]));
-    //if !(ra[MIN] > rb[MAX] || rb[MIN] > ra[MAX]) {
 
     if (overlap < manifold.overlap) {
       manifold.overlap = overlap;

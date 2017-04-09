@@ -1,15 +1,13 @@
-import Victor from 'victor';
 import { is, isNil } from 'ramda';
 import { checkCircleCollision } from './collision';
-
-const isVictor = is(Victor);
+import { isVector } from './utils';
 
 export default class Circle {
   constructor(options) {
     Object.assign(this, options || {});
 
-    if (!isVictor(this.center)) {
-      this.center = new Victor(0, 0);
+    if (!isVector(this.center)) {
+      this.center = [0, 0];
     }
 
     if (isNil(this.radius)) {

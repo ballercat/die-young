@@ -6,11 +6,11 @@ describe('Circle', () => {
 
   it('handles collisions', () => {
     const c1 = new Circle({
-      center: new Victor(0, 0),
+      center: [0, 0],
       radius: 1
     });
     const c2 = new Circle({
-      center: new Victor(1, 1),
+      center: [1, 1],
       radius: 2
     });
 
