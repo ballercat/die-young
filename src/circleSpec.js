@@ -1,5 +1,4 @@
 import Circle from './circle';
-import Victor from 'victor';
 import { isCollision } from './collision';
 
 describe('Circle', () => {

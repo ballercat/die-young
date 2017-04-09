@@ -1,6 +1,5 @@
 import { has, curry } from 'ramda';
 import { dot, mul, div, sub, norm2 } from 'numericjs';
-import Victor from 'victor';
 
 /**
  * Circle to circle collision detection

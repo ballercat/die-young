@@ -2,9 +2,6 @@ import { Container, basicRenderer } from './renderer';
 import Input, { UP, DOWN, LEFT, RIGHT } from './input';
 import polygonGraphic from './polygonGraphic';
 import Polygon from './polygon';
-import Victor from 'victor';
-
-window.Victor = Victor;
 
 const renderer = basicRenderer(document.getElementById('app'));
 // pentagon
