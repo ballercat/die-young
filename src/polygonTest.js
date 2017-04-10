@@ -36,7 +36,9 @@ inputHandler.onKeydown((e) => {
     const poly2 = new Polygon(randomPolygon().units);
     const collision = polygonPolygon(poly, poly2)
     world.add(poly, poly2);
+
     console.log(world.getCollisionGrid(world.bodies));
+
     if (collision) {
       polyShape.lineStyle = LINE_COLLISION;
       polyShape2.lineStyle = LINE_COLLISION;
@@ -46,7 +48,6 @@ inputHandler.onKeydown((e) => {
     }
 
     world.bodies = [];
-
 
     polyShape2.render(poly2);
     polyShape.render(poly);

@@ -63,3 +63,29 @@ describe('Polygon', () => {
   });
 });
 
+describe('aabb generation', () => {
+  it('creates a correct AABB min vector', () => {
+    const poly = new Polygon([
+      96.27643805506328, 27.034190859531222,
+      77.45618300774669, 63.249819872237204,
+      -83.40863567470004, 55.163389080849235
+    ]);
+
+    const lowerBoundY = poly.aabb.bounds[0][1].toFixed(6);
+    const expectedLowerBoundY = 27.034190859531222.toFixed(6);
+    expect(lowerBoundY).toBe(expectedLowerBoundY);
+  });
+
+  it('calculates correct upper bounds', () => {
+    const poly = new Polygon([
+      -37.01120167243557, 92.8987133967005,
+      -42.12165461950469, 90.69600990184276,
+      -98.47097448417765, 17.420309530442807
+    ]);
+
+    const upperBoundX = poly.aabb.bounds[1][0].toFixed(6) / 1;
+    const expectUpperBoundX = -37.011201672435575.toFixed(6) / 1;
+    expect(upperBoundX).toBe(expectUpperBoundX);
+  });
+});
+

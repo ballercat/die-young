@@ -44,21 +44,21 @@ export default class Polygon {
 
   getAABB() {
     const vertexCount = this.vertices.length;
-    const max = [Number.MIN_VALUE, Number.MIN_VALUE];
-    const min = [Number.MAX_VALUE, Number.MAX_VALUE];
-    for(let i = 0; i < vertexCount; i++) {
-      const vertex = this.vertices[i];
-      if (vertex[0] > max[0]) {
-        max[0] = vertex[0];
-      } else if (vertex[0] < min[0]) {
-        min[0] = vertex[0];
-      }
+    let vertex = this.vertices[0];
+    const max = clone(vertex);
+    const min = clone(vertex);
 
-      if (vertex[1] > max[1]) {
+    for(let i = 1; i < vertexCount; i++) {
+      const vertex = this.vertices[i];
+      if (vertex[0] > max[0])
+        max[0] = vertex[0];
+      if (vertex[0] < min[0])
+        min[0] = vertex[0];
+
+      if (vertex[1] > max[1])
         max[1] = vertex[1]
-      } else if (vertex[1] < min[1]) {
+      if (vertex[1] < min[1])
         min[1] = vertex[1];
-      }
     }
 
     return new AABB({
