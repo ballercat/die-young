@@ -1,4 +1,5 @@
 import { compose, curry, not, isNil } from 'ramda';
+import collision from './collision';
 
 /**
  * World contains physics bodies and is what
@@ -22,12 +23,23 @@ export const makeGrid = () => {
   return new Array(GRID_SIZE);
 };
 
-export const intoGrid = curry((grid, body) => {
+export const getBodyGridBounds = body => {
   const bounds = body.aabb.bounds;
-  const bodyMinX = Math.floor(bounds[0][0] / CELL_SIZE);
-  const bodyMaxX = Math.floor(bounds[1][0] / CELL_SIZE);
-  const bodyMinY = Math.floor(bounds[0][1] / CELL_SIZE);
-  const bodyMaxY = Math.floor(bounds[1][1] / CELL_SIZE);
+  const bodyMinX = Math.round(bounds[0][0] / CELL_SIZE);
+  const bodyMinY = Math.round(bounds[0][1] / CELL_SIZE);
+  const bodyMaxX = Math.round(bounds[1][0] / CELL_SIZE);
+  const bodyMaxY = Math.round(bounds[1][1] / CELL_SIZE);
+
+  return {
+    bodyMinX, bodyMinY,
+    bodyMaxX, bodyMaxY
+  };
+};
+
+export const intoGrid = curry((grid, body) => {
+  const {
+    bodyMinX, bodyMinY,
+    bodyMaxY, bodyMaxX } = getBodyGridBounds(body);
 
   const cellCountX = (bodyMaxX - bodyMinX) || 0;
   const cellCountY = (bodyMaxY - bodyMinY) || 0;
@@ -36,16 +48,23 @@ export const intoGrid = curry((grid, body) => {
   let j = 0;
 
   for(i = 0; i < cellCountX; i++) {
-    const offsetX = GRID_OFFSET + bodyMinX + (i * CELL_SIZE);
+    const X = ((bodyMinX + i) * CELL_SIZE);
+    const offsetX = GRID_OFFSET + X;
 
     for(j = 0; j < cellCountY; j++) {
-      const offsetY = GRID_OFFSET + bodyMinY + (j * CELL_SIZE);
+      const Y = ((bodyMinY + j) * CELL_SIZE);
+      const offsetY = GRID_OFFSET + Y;
       const location = Math.floor((offsetX * ROW_COUNT + offsetY) / CELL_SIZE);
       if (!grid[location])
-        grid[location] = [];
+        grid[location] = {
+          X,
+          Y,
+          CELL_SIZE,
+          bodies: []
+        };
 
-      if (!grid[location].includes(body)) {
-        grid[location].push(body);
+      if (!grid[location].bodies.includes(body)) {
+        grid[location].bodies.push(body);
       }
     }
   }
@@ -82,10 +101,56 @@ export default class World {
   step() {
   }
 
+  resolveCollisions(pairs) {
+    const resolved = {};
+
+    pairs.forEach(pair => {
+      const a = pair[0];
+      const b = pair[1];
+
+      if (!resolved[a._uuid])
+        resolved[a._uuid] = [];
+      else if(resolved[a._uuid].includes(b._uuid))
+        return;
+
+      if (!resolved[b._uuid])
+        resolved[b._uuid] = [];
+      else if(resolved[b._uuid].includes(b._uuid))
+        return;
+
+      resolved[a._uuid].push(b._uuid);
+      resolved[b._uuid].push(a._uuid);
+
+      if (collision(a.body, b.body)) {
+        a.onCollision(b);
+        b.onCollision(a);
+      }
+    });
+  }
+
   /**
    * Returns collision pairs
    */
-  getCollisionPairs(bodies) {
+  getCollisionPairs(grid) {
+    // first filter out any grid cell with one or more bodies
+    const pairArray = grid
+      .filter(cell => cell.bodies.length > 1)
+      .map(cell => {
+        const length = cell.bodies.length;
+        if (length === 2)
+          return cell.bodies;
+
+        const pairs = [];
+        let i, j;
+        for (i = 0; i < length; i++) {
+          for (j = i + 1; j < length; j++) {
+            pairs.push[[cell.bodies[i], cell.bodies[j]]];
+          }
+        }
+
+        return pairs;
+      });
+    return pairArray;
   }
 
   getCollisionGrid(bodies) {

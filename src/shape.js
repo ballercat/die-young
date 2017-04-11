@@ -10,7 +10,14 @@ const hasPosition = body => body && body.x && body.y;
 
 export default class Shape {
   // Graphics must be injected into shapes
-  constructor(Graphics, renderOptions = {}, debug = true) {
+  constructor(
+    Graphics,
+    renderOptions = {
+      fill: [0, 1],
+      lineStyle: [0, 0, 1]
+    },
+    debug = true
+  ) {
     // Will throw anyway but at least helps us with why
     if (!Graphics)
       throw 'Graphics missing for Shape';
@@ -23,7 +30,7 @@ export default class Shape {
   beginRender() {
     this.graphics.clear();
     if (this.fill)
-      this.graphics.beginFill(this.fill);
+      this.graphics.beginFill(...this.fill);
 
     if (this.lineStyle)
       this.graphics.lineStyle(...this.lineStyle);

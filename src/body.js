@@ -6,6 +6,8 @@ import { clone } from 'numericjs';
 
 const hasBody = has('body');
 const STATIC_BODY_MASS = Number.POSITIVE_INFINITY;
+const LINE_COLLISION = [2, 0xFF3300];
+const LINE = [2, 0x003300];
 
 export default class Body {
   constructor(options = {}) {
@@ -34,6 +36,10 @@ export default class Body {
     };
   }
 
+  onCollision(body) {
+    this.shape.lineStyle = LINE_COLLISION;
+  }
+
   static isStatic(body) {
     return body.mass === STATIC_BODY_MASS;
   }
@@ -47,6 +53,18 @@ export default class Body {
 
   attachShape(shape) {
     this.shape = shape;
+  }
+
+  set body(body) {
+    this.state.body = body;
+  }
+
+  get body() {
+    return this.state.body;
+  }
+
+  get aabb() {
+    return this.state.body.aabb;
   }
 
   get mass() {
@@ -71,6 +89,7 @@ export default class Body {
 
   render() {
     this.shape.render(this.body);
+    this.shape.lineStyle = LINE;
   }
 }
 

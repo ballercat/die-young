@@ -2,6 +2,8 @@ import { Container, Graphics, basicRenderer } from './renderer';
 import Input, { SPACEBAR } from './input';
 import Shape from './shape';
 import Polygon from './polygon';
+import Body from './body';
+import GridShape from './gridShape';
 import { randomPolygon } from './utils';
 import { polygonPolygon } from './collision';
 import World from './world';
@@ -19,38 +21,42 @@ render();
 
 const LINE_COLLISION = [2, 0xFF3300];
 const LINE = [2, 0x003300];
+const GRID_LINE = [1, 0x3f3f3f];
 
 const world = new World();
-const polyShape = new Shape(Graphics, { lineStyle: LINE });
-const polyShape2 = new Shape(Graphics, { lineStyle: LINE });
+const gridShape = new GridShape(Graphics, { lineStyle: GRID_LINE });
 
-stage.addChild(polyShape.graphics);
-stage.addChild(polyShape2.graphics);
+const polyBody1 = new Body({
+  body: new Polygon([])
+});
+polyBody1.attachShape(new Shape(Graphics, { fill: [0xffffff, 1], lineStyle: LINE }));
+
+const polyBody2 = new Body({
+  body: new Polygon([])
+});
+polyBody2.attachShape(new Shape(Graphics, { fill: [0xffffff, 1], lineStyle: LINE }));
+
+stage.addChild(polyBody1.shape.graphics);
+stage.addChild(polyBody2.shape.graphics);
+stage.addChild(gridShape.graphics);
 
 // Keyboard
 const inputHandler = new Input();
 inputHandler.onKeydown((e) => {
   if (e.which === SPACEBAR) {
     // Crate and collision test two polygons
-    const poly = new Polygon(randomPolygon().units);
-    const poly2 = new Polygon(randomPolygon().units);
-    const collision = polygonPolygon(poly, poly2)
-    world.add(poly, poly2);
+    polyBody1.body = new Polygon(randomPolygon().units);
+    polyBody2.body = new Polygon(randomPolygon().units);
+    world.add(polyBody1, polyBody2);
 
-    console.log(world.getCollisionGrid(world.bodies));
-
-    if (collision) {
-      polyShape.lineStyle = LINE_COLLISION;
-      polyShape2.lineStyle = LINE_COLLISION;
-    } else {
-      polyShape.lineStyle = LINE;
-      polyShape2.lineStyle = LINE;
-    }
+    const grid = world.getCollisionGrid(world.bodies);
+    gridShape.render(grid);
+    world.resolveCollisions(world.getCollisionPairs(grid));
 
     world.bodies = [];
 
-    polyShape2.render(poly2);
-    polyShape.render(poly);
+    polyBody1.render();
+    polyBody2.render();
   }
 });
 

@@ -1,4 +1,5 @@
 import World from './world';
+import Polygon from './polygon';
 
 const unit = [
   96.27643805506328, 27.034190859531222,
@@ -27,5 +28,20 @@ describe('World class', () => {
   it('can run a simulation', () => {
     expect(world.step).toBeDefined();
   });
+});
+
+describe('Collision grid', () => {
+
+  it('places polygons into it', () => {
+    const poly = new Polygon(unit);
+    const poly2 = new Polygon(unit2);
+
+    const world = new World();
+    world.add(poly, poly2);
+
+    const grid = world.getCollisionGrid(world.bodies);
+    expect(grid.length).toBe(4);
+  });
+
 });
 
