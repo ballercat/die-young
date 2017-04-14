@@ -1,4 +1,7 @@
 import Shape from './shape';
+import { CELL_SIZE } from './world';
+
+const drawRectArguments = [0, 0, CELL_SIZE, CELL_SIZE];
 
 export default class GridShape extends Shape {
 
@@ -11,7 +14,9 @@ export default class GridShape extends Shape {
   render(grid) {
     this.beginRender();
     grid.forEach(cell => {
-      this.graphics.drawRect(cell.X, cell.Y, cell.CELL_SIZE, cell.CELL_SIZE);
+      drawRectArguments[0] = cell.X;
+      drawRectArguments[1] = cell.Y;
+      this.graphics.drawRect(...drawRectArguments);
     });
     this.endRender();
   }

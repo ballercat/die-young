@@ -1,5 +1,6 @@
 import { compose, curry, not, isNil } from 'ramda';
 import collision from './collision';
+import { consoleTap } from './utils';
 
 /**
  * World contains physics bodies and is what
@@ -9,7 +10,7 @@ import collision from './collision';
 // TODO: this needs to be at least 1/2 of 60fps
 const FIXED_TIMESTEP = 1 / 60.0;
 const GRID_BOUNDARY = 1000;
-const CELL_SIZE = 100;
+export const CELL_SIZE = 100;
 const ROW_COUNT = (GRID_BOUNDARY / CELL_SIZE);
 const COLUMN_COUNT = ROW_COUNT;
 // Positive offset to use when indexing onto the flat grid array
@@ -25,15 +26,13 @@ export const makeGrid = () => {
 
 export const getBodyGridBounds = body => {
   const bounds = body.aabb.bounds;
-  const bodyMinX = Math.round(bounds[0][0] / CELL_SIZE);
-  const bodyMinY = Math.round(bounds[0][1] / CELL_SIZE);
-  const bodyMaxX = Math.round(bounds[1][0] / CELL_SIZE);
-  const bodyMaxY = Math.round(bounds[1][1] / CELL_SIZE);
-
-  return {
-    bodyMinX, bodyMinY,
-    bodyMaxX, bodyMaxY
-  };
+  consoleTap(bounds);
+  return consoleTap({
+    bodyMinX: Math.ceil(Math.abs(bounds[0][0]) / CELL_SIZE) * Math.sign(bounds[0][0]),
+    bodyMinY: Math.ceil(Math.abs(bounds[0][1]) / CELL_SIZE) * Math.sign(bounds[0][1]),
+    bodyMaxX: Math.ceil(Math.abs(bounds[1][0]) / CELL_SIZE) * Math.sign(bounds[1][0]),
+    bodyMaxY: Math.ceil(Math.abs(bounds[1][1]) / CELL_SIZE) * Math.sign(bounds[1][1])
+  });
 };
 
 export const intoGrid = curry((grid, body) => {
@@ -41,8 +40,8 @@ export const intoGrid = curry((grid, body) => {
     bodyMinX, bodyMinY,
     bodyMaxY, bodyMaxX } = getBodyGridBounds(body);
 
-  const cellCountX = (bodyMaxX - bodyMinX) || 0;
-  const cellCountY = (bodyMaxY - bodyMinY) || 0;
+  const cellCountX = (bodyMaxX - bodyMinX) || 1;
+  const cellCountY = (bodyMaxY - bodyMinY) || 1;
 
   let i = 0;
   let j = 0;
@@ -55,11 +54,10 @@ export const intoGrid = curry((grid, body) => {
       const Y = ((bodyMinY + j) * CELL_SIZE);
       const offsetY = GRID_OFFSET + Y;
       const location = Math.floor((offsetX * ROW_COUNT + offsetY) / CELL_SIZE);
+      consoleTap(location);
       if (!grid[location])
         grid[location] = {
-          X,
-          Y,
-          CELL_SIZE,
+          X, Y,
           bodies: []
         };
 
