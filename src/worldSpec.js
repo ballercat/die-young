@@ -58,7 +58,6 @@ describe('Collision grid', () => {
     world.add(poly, poly2);
 
     const grid = world.getCollisionGrid(world.bodies);
-    console.log(grid);
     expect(grid.length).toBe(4);
   });
 });

@@ -31,18 +31,12 @@ export const toMinMax = val => {
 
 export const getBodyGridBounds = body => {
   const bounds = body.aabb.bounds;
-  // return consoleTap({
-  //   bodyMinX: Math.ceil(Math.abs(bounds[0][0]) / CELL_SIZE) * Math.sign(bounds[0][0]),
-  //   bodyMinY: Math.ceil(Math.abs(bounds[0][1]) / CELL_SIZE) * Math.sign(bounds[0][1]),
-  //   bodyMaxX: Math.ceil(Math.abs(bounds[1][0]) / CELL_SIZE) * Math.sign(bounds[1][0]),
-  //   bodyMaxY: Math.ceil(Math.abs(bounds[1][1]) / CELL_SIZE) * Math.sign(bounds[1][1])
-  // });
-  return consoleTap({
+  return {
     bodyMinX: toMinMax(bounds[0][0]),
     bodyMinY: toMinMax(bounds[0][1]),
     bodyMaxX: toMinMax(bounds[1][0]),
     bodyMaxY: toMinMax(bounds[1][1])
-  });
+  };
 };
 
 export const getGridLocation = (j, i) => {
@@ -64,17 +58,16 @@ export const intoGrid = curry((grid, body) => {
     j = bodyMinY;
 
     do {
-      console.log(i, j);
       const Y = j * CELL_SIZE;
       const offsetY = GRID_OFFSET + Y;
       const location = Math.floor((offsetX * ROW_COUNT + offsetY) / CELL_SIZE);
 
       if (!grid[location])
-        grid[location] = consoleTap({
+        grid[location] = {
           location,
           X, Y,
           bodies: []
-        });
+        };
 
       if (!grid[location].bodies.includes(body)) {
         grid[location].bodies.push(body);
@@ -153,7 +146,6 @@ export default class World {
     const pairArray = grid
       .filter(cell => cell.bodies.length > 1)
       .map(cell => {
-        console.log(cell);
         const length = cell.bodies.length;
         if (length === 2)
           return cell.bodies;
