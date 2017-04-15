@@ -24,15 +24,29 @@ export const makeGrid = () => {
   return new Array(GRID_SIZE);
 };
 
+export const toMinMax = val => {
+  const mutate = val < 0 ? Math.ceil : Math.floor;
+  return mutate(Math.abs(val) / CELL_SIZE) * Math.sign(val);
+};
+
 export const getBodyGridBounds = body => {
   const bounds = body.aabb.bounds;
-  consoleTap(bounds);
+  // return consoleTap({
+  //   bodyMinX: Math.ceil(Math.abs(bounds[0][0]) / CELL_SIZE) * Math.sign(bounds[0][0]),
+  //   bodyMinY: Math.ceil(Math.abs(bounds[0][1]) / CELL_SIZE) * Math.sign(bounds[0][1]),
+  //   bodyMaxX: Math.ceil(Math.abs(bounds[1][0]) / CELL_SIZE) * Math.sign(bounds[1][0]),
+  //   bodyMaxY: Math.ceil(Math.abs(bounds[1][1]) / CELL_SIZE) * Math.sign(bounds[1][1])
+  // });
   return consoleTap({
-    bodyMinX: Math.ceil(Math.abs(bounds[0][0]) / CELL_SIZE) * Math.sign(bounds[0][0]),
-    bodyMinY: Math.ceil(Math.abs(bounds[0][1]) / CELL_SIZE) * Math.sign(bounds[0][1]),
-    bodyMaxX: Math.ceil(Math.abs(bounds[1][0]) / CELL_SIZE) * Math.sign(bounds[1][0]),
-    bodyMaxY: Math.ceil(Math.abs(bounds[1][1]) / CELL_SIZE) * Math.sign(bounds[1][1])
+    bodyMinX: toMinMax(bounds[0][0]),
+    bodyMinY: toMinMax(bounds[0][1]),
+    bodyMaxX: toMinMax(bounds[1][0]),
+    bodyMaxY: toMinMax(bounds[1][1])
   });
+};
+
+export const getGridLocation = (j, i) => {
+
 };
 
 export const intoGrid = curry((grid, body) => {
@@ -40,32 +54,37 @@ export const intoGrid = curry((grid, body) => {
     bodyMinX, bodyMinY,
     bodyMaxY, bodyMaxX } = getBodyGridBounds(body);
 
-  const cellCountX = (bodyMaxX - bodyMinX) || 1;
-  const cellCountY = (bodyMaxY - bodyMinY) || 1;
+  let i = bodyMinX;
+  let j;
 
-  let i = 0;
-  let j = 0;
-
-  for(i = 0; i < cellCountX; i++) {
-    const X = ((bodyMinX + i) * CELL_SIZE);
+  do {
+    const X = (i) * CELL_SIZE;
     const offsetX = GRID_OFFSET + X;
 
-    for(j = 0; j < cellCountY; j++) {
-      const Y = ((bodyMinY + j) * CELL_SIZE);
+    j = bodyMinY;
+
+    do {
+      console.log(i, j);
+      const Y = j * CELL_SIZE;
       const offsetY = GRID_OFFSET + Y;
       const location = Math.floor((offsetX * ROW_COUNT + offsetY) / CELL_SIZE);
-      consoleTap(location);
+
       if (!grid[location])
-        grid[location] = {
+        grid[location] = consoleTap({
+          location,
           X, Y,
           bodies: []
-        };
+        });
 
       if (!grid[location].bodies.includes(body)) {
         grid[location].bodies.push(body);
       }
-    }
-  }
+
+      j++;
+    } while (j <= bodyMaxY);
+
+    i++;
+  } while (i <= bodyMaxX);
 });
 
 export default class World {
@@ -134,6 +153,7 @@ export default class World {
     const pairArray = grid
       .filter(cell => cell.bodies.length > 1)
       .map(cell => {
+        console.log(cell);
         const length = cell.bodies.length;
         if (length === 2)
           return cell.bodies;

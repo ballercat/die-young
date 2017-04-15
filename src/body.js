@@ -37,7 +37,12 @@ export default class Body {
   }
 
   onCollision(body) {
-    this.shape.lineStyle = LINE_COLLISION;
+    this.shape.render(
+      this.body,
+      {
+        lineStyle: LINE_COLLISION
+      }
+    );
   }
 
   static isStatic(body) {
@@ -89,7 +94,6 @@ export default class Body {
 
   render() {
     this.shape.render(this.body);
-    this.shape.lineStyle = LINE;
   }
 }
 

@@ -16,7 +16,7 @@ export default class Shape {
       fill: [0, 1],
       lineStyle: [0, 0, 1]
     },
-    debug = true
+    debug = {}
   ) {
     // Will throw anyway but at least helps us with why
     if (!Graphics)
@@ -27,13 +27,20 @@ export default class Shape {
     this.debug = debug;
   }
 
-  beginRender() {
+  clear() {
     this.graphics.clear();
-    if (this.fill)
-      this.graphics.beginFill(...this.fill);
+  }
 
-    if (this.lineStyle)
-      this.graphics.lineStyle(...this.lineStyle);
+  beginRender(options = {}) {
+    this.clear();
+    const fill = options.fill || this.fill;
+    const lineStyle = options.lineStyle || this.lineStyle;
+
+    if (fill)
+      this.graphics.beginFill(...fill);
+
+    if (lineStyle)
+      this.graphics.lineStyle(...lineStyle);
   }
 
   endRender(body) {
@@ -55,13 +62,13 @@ export default class Shape {
     }[Type];
   }
 
-  render(body) {
+  render(body, options = {}) {
     let renderFunc = Shape.renderFunction(body.type);
     if (renderFunc) {
       if (this.debug) {
         renderFunc += 'Debug';
       }
-      this[renderFunc](body);
+      this[renderFunc](body, options);
     }
   }
 
@@ -71,25 +78,25 @@ export default class Shape {
 
   renderCircle(circle) {}
 
-  renderAABB(aabb) {
-    this.beginRender();
+  renderAABB(aabb, options) {
+    this.beginRender(options);
     this.graphics.drawRect(aabb.dims[0][0], aabb.dims[1][1], aabb.halfSize * 2, aabb.halfSize * 2);
     this.endRender();
   }
 
-  renderPolygon(polygon) {
-    this.beginRender();
+  renderPolygon(polygon, options) {
+    this.beginRender(options);
     // Path need to be closed, however units are not so we must append starting units to the end
     this.graphics.drawPolygon([...polygon.units, polygon.units[0], polygon.units[1]]);
     this.endRender(polygon);
   }
 
-  renderPolygonDebug(polygon) {
-    this.renderPolygon(polygon);
+  renderPolygonDebug(polygon, options) {
+    this.renderPolygon(polygon, options);
     if (polygon.edges && polygon.normals) {
       this.renderNormals(polygon.normals, polygon.edges);
     }
-    if (polygon.aabb) {
+    if (this.debug.boundingBox && polygon.aabb) {
       const aabb = polygon.aabb;
       this.graphics.drawRect(...sub(aabb.center, aabb.halfSize), ...mul(aabb.halfSize, 2));
     }

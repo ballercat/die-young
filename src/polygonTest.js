@@ -40,6 +40,25 @@ stage.addChild(polyBody1.shape.graphics);
 stage.addChild(polyBody2.shape.graphics);
 stage.addChild(gridShape.graphics);
 
+let renderGrid = false;
+let grid = null;
+
+world.add(polyBody1, polyBody2);
+
+
+const unit3 = [
+  99.97563625745391, 2.2072958381843275,
+  -59.616115224589194, 80.28647959356859,
+  -16.29674431176072, -98.66314471390568,
+  99.83842372316636, -5.682354131299165
+];
+
+const unit4 = [
+  52.6024382534728, 85.04694873885589,
+  18.92734690208401, 98.19244135496464,
+  99.61818446302485, -8.730253392127613,
+  99.9789262161968, -2.052879113897514
+];
 // Keyboard
 const inputHandler = new Input();
 inputHandler.onKeydown((e) => {
@@ -47,19 +66,41 @@ inputHandler.onKeydown((e) => {
     // Crate and collision test two polygons
     polyBody1.body = new Polygon(randomPolygon().units);
     polyBody2.body = new Polygon(randomPolygon().units);
-    world.add(polyBody1, polyBody2);
+    // polyBody1.body = new Polygon(unit3);
+    // polyBody2.body = new Polygon(unit4);
 
-    const grid = world.getCollisionGrid(world.bodies);
+    grid = world.getCollisionGrid(world.bodies);
     console.log(grid);
-    gridShape.render(grid);
-    world.resolveCollisions(world.getCollisionPairs(grid));
-
-    world.bodies = [];
+    if (renderGrid)
+      gridShape.render(grid);
 
     polyBody1.render();
     polyBody2.render();
+
+    world.resolveCollisions(world.getCollisionPairs(grid));
   }
 });
 
 console.log('Polygon tester. Generate random polygon with SPACEBAR');
+
+const enableGrid = document.getElementById('grid');
+enableGrid.onchange = () => {
+  renderGrid = !renderGrid;
+  if (renderGrid)
+    gridShape.render(grid);
+  else
+    gridShape.clear();
+};
+
+const enableBoundingBox = document.getElementById("boundingBox");
+let bbEnabled = false
+enableBoundingBox.onchange = () => {
+  bbEnabled = !bbEnabled;
+  polyBody1.shape.debug.boundingBox = bbEnabled;
+  polyBody2.shape.debug.boundingBox = bbEnabled;
+
+  polyBody1.render();
+  polyBody2.render();
+};
+
 
