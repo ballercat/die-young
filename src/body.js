@@ -2,7 +2,7 @@ import Polygon from './polygon';
 import { isNil, has } from 'ramda';
 import { POLYGON, CIRCLE } from './bodyTypes';
 import AABB from './aabb';
-import { clone } from 'numericjs';
+import { div, clone, add, mul } from 'numericjs';
 
 const hasBody = has('body');
 const STATIC_BODY_MASS = Number.POSITIVE_INFINITY;
@@ -29,10 +29,25 @@ export default class Body {
       this.state.forces = [];
     }
 
+    if (isNil(this.state.acceleration)) {
+      this.state.acceleration = [0, 0];
+    }
+
+    if (isNil(this.state.velocity)) {
+      this.state.velocity = [0, 0];
+    }
+
+    this.copyStateToPrevious();
+  }
+
+  copyStateToPrevious() {
     this.previousState = {
       mass: this.state.mass,
       body: this.state.body,
-      position: clone(this.state.position)
+      position: clone(this.state.position),
+      acceleration: clone(this.state.acceleration),
+      velocity: clone(this.state.velocity),
+      forces: clone(this.state.forces)
     };
   }
 
@@ -90,6 +105,20 @@ export default class Body {
 
   update(delta) {
     // Update physics here
+    this.copyStateToPrevious();
+    const i = mul(this.state.velocity, delta);
+    const j = mul(mul(this.previousState.acceleration, 0.5), Math.pow(delta, 2));
+    const position = add(this.state.position, add(i, j));
+    const allForces = add(...this.state.forces);
+    const acceleration = div(allForces, this.state.mass);
+    const averageAcceleration = div(add(this.state.acceleration, acceleration), 2);
+    const velocity = add(this.state.velocity, mul(averageAcceleration, delta));
+
+    Object.assign(this.state, {
+      position,
+      acceleration,
+      velocity
+    });
   }
 
   render() {
