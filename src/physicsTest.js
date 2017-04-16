@@ -4,9 +4,11 @@ import Shape from './shape';
 import Body from './body';
 import World, { FIXED_TIMESTEP } from './world';
 import Polygon from './polygon';
+import GridShape from './gridShape';
 import { randomPolygon } from './utils';
 import { polygonPolygon } from './collision';
 
+const GRID_LINE = [1, 0x3f3f3f];
 const GRAVITY = [0, -50];
 const renderer = basicRenderer(document.getElementById('app'));
 const stage = new Container();
@@ -15,8 +17,14 @@ stage.scale.y = -1;
 
 const world = new World();
 
+let renderGrid = false;
+const gridShape = new GridShape(Graphics, { lineStyle: GRID_LINE });
+
 let lastUpdate = Date.now();
 const render = () => {
+  if (renderGrid)
+    gridShape.render(world.grid);
+
   // renderer.clear();
   renderer.render(stage);
   requestAnimationFrame(render);
@@ -49,6 +57,7 @@ const object = new Body({
 });
 object.attachShape(new Shape(Graphics, { fill: [0, 0], lineStyle: LINE }));
 
+stage.addChild(gridShape.graphics);
 stage.addChild(object.shape.graphics);
 
 world.add(ground, object);
@@ -64,3 +73,11 @@ inputHandler.onKeydown((e) => {
   }
 });
 
+const enableGrid = document.getElementById('grid');
+enableGrid.onchange = () => {
+  renderGrid = !renderGrid;
+  if (renderGrid)
+    gridShape.render(world.grid);
+  else
+    gridShape.clear();
+};

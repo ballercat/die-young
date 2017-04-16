@@ -11,7 +11,7 @@ import { add } from 'numericjs';
 // TODO: this needs to be at least 1/2 of 60fps
 export const FIXED_TIMESTEP = 1 / 60.0;
 const GRID_BOUNDARY = 1000;
-export const CELL_SIZE = 100;
+export const CELL_SIZE = 50;
 const ROW_COUNT = (GRID_BOUNDARY / CELL_SIZE);
 const COLUMN_COUNT = ROW_COUNT;
 // Positive offset to use when indexing onto the flat grid array
@@ -22,7 +22,19 @@ const GRID_SIZE = (ROW_COUNT) * (COLUMN_COUNT);
 const notNil = compose(not, isNil);
 
 export const makeGrid = () => {
-  return new Array(GRID_SIZE);
+  const grid = new Array(GRID_SIZE);
+  for (let i = 0; i < ROW_COUNT; i++) {
+    const X = i * CELL_SIZE - GRID_OFFSET;
+    for (let j = 0; j < COLUMN_COUNT; j++) {
+      const Y = j * CELL_SIZE - GRID_OFFSET;
+      grid[i * ROW_COUNT + j] = {
+        X,
+        Y,
+        bodies: []
+      };
+    }
+  }
+  return grid;
 };
 
 export const toMinMax = val => {
@@ -63,13 +75,6 @@ export const intoGrid = curry((grid, body) => {
       const offsetY = GRID_OFFSET + Y;
       const location = Math.floor((offsetX * ROW_COUNT + offsetY) / CELL_SIZE);
 
-      if (!grid[location])
-        grid[location] = {
-          location,
-          X, Y,
-          bodies: []
-        };
-
       if (!grid[location].bodies.includes(body)) {
         grid[location].bodies.push(body);
       }
@@ -84,6 +89,8 @@ export const intoGrid = curry((grid, body) => {
 export default class World {
   constructor() {
     this.bodies = [];
+    this.grid = [];
+    this._gridStorage = makeGrid();
   }
 
   static getTimeStep() {
@@ -117,6 +124,7 @@ export default class World {
   detectCollisions() {
     const grid = this.getCollisionGrid(this.bodies);
     this.resolveCollisions(this.getCollisionPairs(grid));
+    this.grid = grid;
   }
 
   resolveCollisions(pairs) {
@@ -172,11 +180,13 @@ export default class World {
   }
 
   getCollisionGrid(bodies) {
-    const grid = makeGrid();
-    const placeIntoGrid = intoGrid(grid);
+    for(let i = 0; i < GRID_SIZE; i++) {
+      this._gridStorage[i].bodies = [];
+    };
+    const placeIntoGrid = intoGrid(this._gridStorage);
     bodies.forEach(placeIntoGrid);
 
-    return grid.filter(notNil);
+    return this._gridStorage.filter(notNil);
   }
 }
 

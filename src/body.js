@@ -122,7 +122,6 @@ export default class Body {
     if (!this.state.forces.length)
       return;
 
-    debugger;
     // Update physics here
     this.copyStateToPrevious();
     const i = mul(this.state.velocity, delta);
