@@ -9,7 +9,7 @@ import { randomPolygon } from './utils';
 import { polygonPolygon } from './collision';
 
 const GRID_LINE = [1, 0x3f3f3f];
-const GRAVITY = [0, -50];
+const GRAVITY = [0, -9.81];
 const renderer = basicRenderer(document.getElementById('app'));
 const stage = new Container();
 stage.setTransform(400, 300);

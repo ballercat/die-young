@@ -1,4 +1,4 @@
-import World, { getBodyGridBounds } from './world';
+import World, { getBodyGridBounds, GRID_SIZE } from './world';
 import Polygon from './polygon';
 import { consoleTap } from './utils';
 
@@ -58,7 +58,7 @@ describe('Collision grid', () => {
     world.add(poly, poly2);
 
     const grid = world.getCollisionGrid(world.bodies);
-    expect(grid.length).toBe(4);
+    expect(grid.length).toBe(GRID_SIZE);
   });
 });
 

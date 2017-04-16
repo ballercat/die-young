@@ -128,7 +128,7 @@ export default class Body {
     const j = mul(mul(this.previousState.acceleration, 0.5), Math.pow(delta, 2));
     const position = add(this.state.position, add(i, j));
     const allForces = add(...this.state.forces);
-    const acceleration = div(allForces, this.state.mass);
+    const acceleration = mul(allForces, this.state.mass);
     const averageAcceleration = div(add(this.state.acceleration, acceleration), 2);
     const velocity = add(this.state.velocity, mul(averageAcceleration, delta));
 

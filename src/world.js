@@ -17,7 +17,7 @@ const COLUMN_COUNT = ROW_COUNT;
 // Positive offset to use when indexing onto the flat grid array
 const GRID_OFFSET = GRID_BOUNDARY / 2;
 // TODO: If anything ever falls of the grid we will need to make more than one of these
-const GRID_SIZE = (ROW_COUNT) * (COLUMN_COUNT);
+export const GRID_SIZE = (ROW_COUNT) * (COLUMN_COUNT);
 
 const notNil = compose(not, isNil);
 

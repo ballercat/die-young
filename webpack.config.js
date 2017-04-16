@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     main: './main.js',
     polygonTest: './polygonTest.js',
-    physicsTest: './physicsTest.js'
+    physicsTest: './physicsTest.js',
+    workbench: './workbench.js'
   },
 
   output: {
