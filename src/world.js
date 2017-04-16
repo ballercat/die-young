@@ -1,6 +1,7 @@
 import { compose, curry, not, isNil } from 'ramda';
 import collision from './collision';
 import { consoleTap } from './utils';
+import { add } from 'numericjs';
 
 /**
  * World contains physics bodies and is what
@@ -8,7 +9,7 @@ import { consoleTap } from './utils';
  */
 
 // TODO: this needs to be at least 1/2 of 60fps
-const FIXED_TIMESTEP = 1 / 60.0;
+export const FIXED_TIMESTEP = 1 / 60.0;
 const GRID_BOUNDARY = 1000;
 export const CELL_SIZE = 100;
 const ROW_COUNT = (GRID_BOUNDARY / CELL_SIZE);
@@ -30,7 +31,7 @@ export const toMinMax = val => {
 };
 
 export const getBodyGridBounds = body => {
-  const bounds = body.aabb.bounds;
+  const bounds = body.aabb.bounds.map(minmax => add(minmax, body.position));
   return {
     bodyMinX: toMinMax(bounds[0][0]),
     bodyMinY: toMinMax(bounds[0][1]),
@@ -109,6 +110,13 @@ export default class World {
    * Simulate the world by the predefined step
    */
   step() {
+    this.bodies.forEach(body => body.update(FIXED_TIMESTEP));
+    this.detectCollisions();
+  }
+
+  detectCollisions() {
+    const grid = this.getCollisionGrid(this.bodies);
+    this.resolveCollisions(this.getCollisionPairs(grid));
   }
 
   resolveCollisions(pairs) {

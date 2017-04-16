@@ -9,7 +9,7 @@ export default class Polygon {
 
     this.type = POLYGON;
     this.units = [...units];
-    this.vertices = Polygon.unitsToVecotrs(this.units);
+    this.vertices = Polygon.unitsToVectors(this.units);
     this.edges = Polygon.getEdges(this.vertices);
     this.normals = Polygon.getNormals(this.edges);
 
@@ -67,7 +67,7 @@ export default class Polygon {
     });
   }
 
-  static unitsToVecotrs(units) {
+  static unitsToVectors(units) {
     const length = units.length / 2;
     const vectors = new Array(length);
 

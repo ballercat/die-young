@@ -3,8 +3,8 @@ import { tap, is } from 'ramda';
 
 export const randomPolygon = (
   r = 100.0,
-  minSides = 3,
-  maxSides = 6,
+  minSides = 4,
+  maxSides = 10,
   width = 800,
   height = 600
 ) => {

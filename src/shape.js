@@ -4,7 +4,7 @@
 import { POINT, LINE, CIRCLE, POLYGON } from './bodyTypes';
 import { compose } from 'ramda';
 import { project } from './utils';
-import { mul, sub } from 'numericjs';
+import { add, mul, sub } from 'numericjs';
 
 const hasPosition = body => body && body.x && body.y;
 
@@ -86,8 +86,9 @@ export default class Shape {
 
   renderPolygon(polygon, options) {
     this.beginRender(options);
+    const vertices = [].concat.apply([], polygon.vertices);
     // Path need to be closed, however units are not so we must append starting units to the end
-    this.graphics.drawPolygon([...polygon.units, polygon.units[0], polygon.units[1]]);
+    this.graphics.drawPolygon([...vertices, vertices[0], vertices[1]]);
     this.endRender(polygon);
   }
 

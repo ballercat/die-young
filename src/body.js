@@ -9,6 +9,17 @@ const STATIC_BODY_MASS = Number.POSITIVE_INFINITY;
 const LINE_COLLISION = [2, 0xFF3300];
 const LINE = [2, 0x003300];
 
+const unitsToVectors = (units) => {
+  const length = units.length / 2;
+  const vectors = new Array(length);
+
+  for(let i = 0, j = 0; i < length; i++, j = i << 1) {
+    vectors[i] = units.slice(j, j + 2);
+  }
+
+  return vectors;
+};
+
 export default class Body {
   constructor(options = {}) {
     if (!hasBody(options)) {
@@ -58,6 +69,10 @@ export default class Body {
         lineStyle: LINE_COLLISION
       }
     );
+
+    // HACK! will need to remove
+    // reset forces to pause any simulation
+    this.state.forces = [];
   }
 
   static isStatic(body) {
@@ -104,6 +119,10 @@ export default class Body {
   }
 
   update(delta) {
+    if (!this.state.forces.length)
+      return;
+
+    debugger;
     // Update physics here
     this.copyStateToPrevious();
     const i = mul(this.state.velocity, delta);
@@ -119,6 +138,13 @@ export default class Body {
       acceleration,
       velocity
     });
+
+    this.body.position = this.state.position;
+    this.body.vertices = unitsToVectors(this.body.units).map(vertex => add(vertex, position));
+
+    //    console.log(this.body.position);
+
+    this.render();
   }
 
   render() {

@@ -13,12 +13,12 @@ const units = [
 const VERTEX_COUNT = 5;
 const isVector = v => is(Array, v) && v.length === 2;
 const isEdge = obj => has('start', obj) && has('end', obj);
-const unitsToEdges = compose(Polygon.getEdges, Polygon.unitsToVecotrs);
+const unitsToEdges = compose(Polygon.getEdges, Polygon.unitsToVectors);
 const unitsToNormals = compose(Polygon.getNormals, unitsToEdges);
 
 describe('unitsToVectors', () => {
   it('takes an array of vector units and creates vectors', () => {
-    const vectors = Polygon.unitsToVecotrs(units);
+    const vectors = Polygon.unitsToVectors(units);
     expect(vectors.length).toBe(VERTEX_COUNT);
     expect(all(isVector, vectors)).toBe(true);
   });
