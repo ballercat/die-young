@@ -4,12 +4,15 @@ class FormCheckbox extends CustomElement {
   constructor() {
     super();
 
-    this.shadow.innerHTML = `
-      <div>
-        <input type="checkbox" id="${this.id}" name="${this.name}">
-        <label for="${this.id}">${this.label}</label>
-      </div>
-    `;
+    // this.shadow.innerHTML = `
+		// 	<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="${this.id}">
+		// 		<input type="checkbox" id="${this.id}" class="mdl-checkbox__input">
+		// 		<span class="mdl-checkbox__label">${this.label}</span>
+		// 	</label>
+    // `;
+    const t = document.getElementById("template-form-checkbox").import;
+    const instance = t.getElementById('template').content.cloneNode(true);
+    this.shadow.appendChild(instance);
   }
 
   get name() {
@@ -35,11 +38,12 @@ class FormCheckbox extends CustomElement {
   onChange(e) {
     const name = this.name;
     const value = this.checked;
+    debugger;
     this.trigger('form-change', { name, value });
   }
 
   connectedCallback() {
-    this.checkbox = this.shadow.getElementById(this.id);
+    this.checkbox = this.shadow.querySelector(`#${this.id}`);
     this.checkbox.addEventListener('change', this.onChange.bind(this));
   }
 }

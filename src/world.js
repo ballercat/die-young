@@ -11,7 +11,7 @@ import { add } from 'numericjs';
 // TODO: this needs to be at least 1/2 of 60fps
 export const FIXED_TIMESTEP = 1 / 60.0;
 const GRID_BOUNDARY = 1000;
-export const CELL_SIZE = 50;
+export const CELL_SIZE = 100;
 const ROW_COUNT = (GRID_BOUNDARY / CELL_SIZE);
 const COLUMN_COUNT = ROW_COUNT;
 // Positive offset to use when indexing onto the flat grid array
