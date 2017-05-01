@@ -4,20 +4,21 @@ const PIXI = window.PIXI;
 
 export const Graphics = PIXI.Graphics;
 export const Container = PIXI.Container;
-export const basicRenderer = (root) => {
-  const CANVAS_WIDTH = 800;
-  const CANVAS_HEIGHT = 600;
-  const CANVAS_OPTIONS = {
-    antialias: false,
-    transparent: true,
-    resolution: 1
-  };
+export const basicRenderer = (
+  root,
+  options = {
+    width: 800,
+    height: 600,
+    canvas: {
+      antialias: false,
+      transparent: true,
+      resolution: 1
+    }
+  }
+) => {
+  const { width, height, canvas } = options;
+  const renderer = PIXI.autoDetectRenderer(width, height, canvas);
 
-  const renderer = PIXI.autoDetectRenderer(
-    CANVAS_WIDTH,
-    CANVAS_HEIGHT,
-    CANVAS_OPTIONS
-  );
   // Basics
   renderer.view.style.border = '1px dashed black';
   root.appendChild(renderer.view);
