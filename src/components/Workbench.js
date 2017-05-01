@@ -16,7 +16,7 @@ class Workbench extends React.Component {
           <div>
             <ControlsContainer />
             <AppBarContainer />
-            <MainContainer />
+            <MainContainer renderer={this.props.renderer} />
           </div>
         </MuiThemeProvider>
       </Provider>
