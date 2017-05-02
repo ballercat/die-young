@@ -16,13 +16,14 @@ export const controls = (state = { open: false }, { type }) => {
   }
 };
 
+const newWorkspace = () => ({ new: true, id: `workspace${wId++}` });
 const isnt = curry((id, { id: r }) => id !== r);
 const removeWS = (id, state) => filter(isnt(id), state);
 
-export const cards = (state = [], { id, type }) => {
+export const cards = (state = [newWorkspace()], { id, type }) => {
   switch(type) {
     case NEW_WORKSPACE:
-      return [...state, { new: true, id: `workspace${wId++}` }];
+      return [...state, newWorkspace() ];
     case REMOVE_WORKSPACE:
       return removeWS(id, state);
     default:

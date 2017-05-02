@@ -6,6 +6,21 @@ class Renderer extends React.Component {
     bootstrap: PropTypes.func.isRequired
   }
 
+  componentWillRecieveProps(nextProps) {
+    const { width: nextWidth, height: nextHeight } = nextProps;
+    const { width, height } = this.props;
+
+    if (this.renderer && (nexWidth !== width || nextHeight !== height)) {
+      this.renderer.resize(nextWidth, nextHeight);
+    }
+  }
+
+  componentWillUnmount() {
+    const { renderer } = this.state;
+    if (renderer)
+      renderer.destroy();
+  }
+
   componentDidMount() {
     const { bootstrap } = this.props;
     this.renderer = bootstrap(this.root);

@@ -3,16 +3,23 @@ import { Card, CardHeader, CardActions, CardMedia, CardText } from 'material-ui/
 import AppBar from 'material-ui/AppBar';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import ActionBuild from 'material-ui/svg-icons/action/build';
-import Slider from 'material-ui/Slider';
-import { noop } from 'ramda';
+import RendererSetup from './RendererSetup';
+import Renderer from './Renderer';
+import { noop, when } from 'ramda';
 
 const style = {
-  height: '50vw',
+  minHeight: '50vw',
   margin: '20px',
-  padding: '20px'
-}
+  // padding: '20px'
+};
+
+const appBarStyle = {
+  backgroundColor: 'inherit',
+  color: 'black',
+  fill: 'black'
+};
 
 class Workspace extends React.Component {
   static defaultProps = {
@@ -24,57 +31,24 @@ class Workspace extends React.Component {
     height: 300
   }
 
-  componentDidMount() {
-
-  }
-
-  componentWillUnmount() {
-    const { renderer } = this.state;
-    if (renderer)
-      renderer.destroy();
-  }
-
-  create = () => {
-    if (this.state.renderer) {
-      this.state.renderer.destroy();
-    }
-
-    const { width, height } = this.state;
-    this.setState({
-      renderer: this.props.renderer.bootstrap(this.renderRoot, { width, height })
-    });
-  }
-
   render() {
-    const { title = 'New Workspace', remove, id } = this.props;
+    const { title = 'New Workspace', renderer, remove, id } = this.props;
+    const { width, height } = this.state;
     return (
-      <Card style={style} >
+      <Card style={style} onExpandChange={remove} >
         <CardHeader
-          title={title}
+          actAsExpander={true}
+          title={<TextField id='workspace-title' defaultValue={title} onChange={() => {}} />}
+          closeIcon={<NavigationClose />}
+          openIcon={null}
+          showExpandableButton={true}
         />
         <CardMedia>
-          <div ref={(node) => this.renderRoot = node}></div>
+          <Renderer {...renderer} />
         </CardMedia>
         <CardText>
-          <Slider
-            max={1600}
-            min={400}
-            step={5}
-            onChange={(e, width) => this.setState({ width })}
-          />
-          <span>{`Width: ${this.state.width}`}</span>
-          <Slider
-            max={1200}
-            min={300}
-            step={5}
-            onChange={(e, height) => this.setState({ height })}
-          />
-          <span>{`Width: ${this.state.height}`}</span>
+          <RendererSetup />
         </CardText>
-        <CardActions>
-          <RaisedButton label="Remove" onTouchTap={() => remove(id)} />
-          <RaisedButton label="Create" onTouchTap={this.create} />
-        </CardActions>
       </Card>
     );
   }
